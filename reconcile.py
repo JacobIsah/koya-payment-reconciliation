@@ -9,7 +9,6 @@ from datetime import datetime
 
 
 def parse_amount(value):
-    # Some amounts are exported as strings with thousands separators, e.g. "4,804.15".
     if isinstance(value, str):
         value = value.replace(",", "").strip()
     return float(value)
@@ -19,7 +18,7 @@ def parse_ts(value):
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
-# Latest attempt seen for each txn_id.
+
 latest = {}
 
 with open("payments.jsonl", encoding="utf-8") as f:
@@ -27,7 +26,7 @@ with open("payments.jsonl", encoding="utf-8") as f:
         try:
             event = json.loads(line)
         except json.JSONDecodeError:
-            continue  # truncated / unreadable line
+            continue  
         if not isinstance(event, dict) or not event.get("txn_id"):
             continue
         ts = parse_ts(event["ts"])
